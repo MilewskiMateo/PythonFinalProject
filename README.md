@@ -2,14 +2,8 @@
 
 ## How to run application
 
-Before running application make sure you have installed all requirements:
+Use docker-compose command:
 
 ```bash
-pip install -r requirements.txt
-```
-
-Then to run application type:
-
-```bash
-python final_project/main.py
+docker-compose up
 ```

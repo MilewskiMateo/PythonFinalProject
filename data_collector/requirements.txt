@@ -1,2 +1,2 @@
-dash==2.0.0
 requests==2.26.0
+redis==4.1.0
