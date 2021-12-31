@@ -26,7 +26,8 @@
   "dependencies": {
     "d3": "^7.2.1",
     "ramda": "^0.26.1",
-    "react-svg-loader": "^3.0.3"
+    "react-svg-loader": "^3.0.3",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",

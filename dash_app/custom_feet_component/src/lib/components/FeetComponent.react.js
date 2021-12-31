@@ -1,8 +1,8 @@
-import React, { Component, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import FeetSVG from '../../images/feet.svg';
 import * as d3 from "d3";
-import { mean } from 'ramda';
+import {mean} from 'ramda';
 
 /**
  * Custom component for displaying sensors position on the feet and their current value
@@ -38,7 +38,7 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
         const svg = d3.select('#feet-image');
         const r = 7;
         // TODO: Interpolate color value
-        const color = '#80bd9e';
+        const color = '#bd80aa';
 
 
         const positions = [
@@ -64,13 +64,12 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
                 .style('fill', color);
 
             const transleteY = r * 0.29;
-            const fontSize = r * 1;
             g.append('text')
                 .attr('x', `${x}%`)
                 .attr('y', `${y}%`)
                 .attr('transform', `translate(0 ${transleteY})`)
                 .attr('text-anchor', 'middle')
-                .style('font-size', `${fontSize}px`)
+                .style('font-size', `${r}px`)
                 .text(value);
         }
 
