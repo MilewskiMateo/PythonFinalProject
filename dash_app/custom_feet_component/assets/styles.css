@@ -5,6 +5,9 @@
 - Remove Undo
 /* Banner
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+* {
+    box-sizing: border-box;
+}
 
 body {
     color: #95969A !important;

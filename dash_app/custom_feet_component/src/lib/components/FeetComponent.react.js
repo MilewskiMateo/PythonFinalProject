@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import FeetSVG from '../../images/feet.svg';
 import * as d3 from "d3";
-import {mean} from 'ramda';
 
 /**
  * Custom component for displaying sensors position on the feet and their current value
@@ -19,15 +18,17 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
         const rightValues = sensorValues.slice(3);
 
         leftFoot.attr('stroke-width', 1);
+        leftFoot.attr('fill', '#FFd15f');
         rightFoot.attr('stroke-width', 1);
+        rightFoot.attr('fill', '#FFd15f');
     }, [...sensorValues]);
 
     // Display sensor values
     useEffect(() => {
         const svg = d3.select('#feet-image');
-        const r = 7;
+        const r = 6;
         // TODO: Interpolate color value
-        const color = '#ffd15f';
+        const color = '#4C78A8';
 
 
         const positions = [
@@ -50,6 +51,8 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
                 .attr('cx', `${x}%`)
                 .attr('cy', `${y}%`)
                 .attr('r', `${r}%`)
+                .attr('stroke-width', 0.5)
+                .style('stroke', '#000000')
                 .style('fill', color);
 
             const transleteY = r * 0.29;

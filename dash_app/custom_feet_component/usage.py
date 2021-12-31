@@ -29,7 +29,6 @@ def build_top_panel():
     return html.Div(
         id='metric-summary-session',
         style={
-            'marginTop': '20px',
             'height': '500px',
             'width': '900px',
         },
@@ -43,14 +42,12 @@ def build_top_panel():
                     'overflow-y': 'hidden'
                 },
                 children=[
+                    generate_metric_row_helper(0),
                     generate_metric_row_helper(1),
                     generate_metric_row_helper(2),
                     generate_metric_row_helper(3),
                     generate_metric_row_helper(4),
                     generate_metric_row_helper(5),
-                    generate_metric_row_helper(6),
-                    generate_metric_row_helper(7),
-
                 ]
             )
         ]
@@ -68,31 +65,23 @@ def generate_metric_list_header():
         },
         {
             'id': "m_header_1",
-            'children': html.Div("Parameter")
-        },
-        {
-            'id': "m_header_2",
-            'children': html.Div("Count")
+            'children': html.Div("Sensor")
         },
         {
             'id': "m_header_3",
-            'children': html.Div("Sparkline")
-        },
-        {
-            'id': "m_header_4",
-            'children': html.Div("OOC%")
+            'children': html.Div("Wykres")
         },
         {
             'id': "m_header_5",
-            'children': html.Div("%OOC")
+            'children': html.Div("Aktualny nacisk")
         },
         {
             'id': "m_header_6",
-            'children': "Pass/Fail"
+            'children': "Anomalia"
         })
 
 
-params = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+params = ['sensor 1', 'sensor 2', 'sensor 3', 'sensor 4', 'sensor 5', 'sensor 6']
 
 
 def generate_metric_row_helper(index):
@@ -110,23 +99,17 @@ def generate_metric_row_helper(index):
         div_id, None,
         {
             'id': item,
-            'children': html.Button(
+            'children': html.Div(
                 id=button_id,
                 children=item,
-                title="Click to visualize live SPC chart",
-                n_clicks=0
             )
-        },
-        {
-            'id': count_id,
-            'children': '0'
         },
         {
             'id': item + '_sparkline',
             'children': dcc.Graph(
                 id=sparkline_graph_id,
                 style={
-                    'width': '100%',
+                    'width': '60px',
                     'height': '95%',
                 },
                 config={
@@ -146,10 +129,6 @@ def generate_metric_row_helper(index):
                         'plot_bgcolor': 'rgb(45, 48, 56)'
                     }
                 }))
-        },
-        {
-            'id': ooc_percentage_id,
-            'children': '0.00%'
         },
         {
             'id': ooc_graph_id + '_container',
@@ -173,7 +152,7 @@ def generate_metric_row_helper(index):
     )
 
 
-def generate_metric_row(id, style, col1, col2, col3, col4, col5, col6):
+def generate_metric_row(id, style, col2, col3, col5, col6):
     if style is None:
         style = {
             'height': '100px',
@@ -184,12 +163,6 @@ def generate_metric_row(id, style, col1, col2, col3, col4, col5, col6):
         className='row metric-row',
         style=style,
         children=[
-            html.Div(
-                id=col1['id'],
-                style={},
-                className='one column',
-                children=col1['children']
-            ),
             html.Div(
                 id=col2['id'],
                 style={'textAlign': 'center'},
@@ -203,12 +176,6 @@ def generate_metric_row(id, style, col1, col2, col3, col4, col5, col6):
                 },
                 className='four columns',
                 children=col3['children']
-            ),
-            html.Div(
-                id=col4['id'],
-                style={},
-                className='one column',
-                children=col4['children']
             ),
             html.Div(
                 id=col5['id'],
@@ -244,7 +211,6 @@ def personButton(name, chosenOne=False):
             html.Div(
                 id=name + 'label',
                 style={
-                    'marginTop': '20px',
                     'color': '#95969A',
                     'fontSize': '20px',
                 },
@@ -261,6 +227,8 @@ app.layout = html.Div([
         id='main_content_wrapper',
         style={
             'display': 'grid',
+            'padding': '30px',
+            'gap': '30px',
             'gridTemplateColumns': '1fr 3fr',
             'width': '100%',
             'height': '100vh',
@@ -274,7 +242,6 @@ app.layout = html.Div([
                     'gridTemplateRows': '1fr 1fr 1fr',
                     'backgroundColor': '#23262E',
                     'gap': '30px',
-                    'padding': '20px',
                 },
                 children=[
                     personButton('Tomek', True),
@@ -291,6 +258,7 @@ app.layout = html.Div([
                     'display': 'grid',
                     'gridTemplateColumns': '1fr',
                     'gridTemplateRows': '1fr 1fr',
+                    'gap': '30px',
                 },
                 children=[
                     html.Div(
@@ -298,6 +266,7 @@ app.layout = html.Div([
                         style={
                             'display': 'grid',
                             'gridTemplateColumns': '2fr 1fr',
+                            'gap': '30px',
                         },
                         children=[
                             html.Div(
@@ -313,7 +282,6 @@ app.layout = html.Div([
                                 id='feet_wrapper',
                                 style={
                                     # 'backgroundColor': 'pink',
-                                    'marginTop': '20px',
                                     'backgroundColor': '#2d3038',
                                     'display': 'flex',
                                     'justifyContent': 'center',
@@ -335,6 +303,7 @@ app.layout = html.Div([
                             'justifyContent': 'center',
                             'alignItems': 'center',
                             # 'backgroundColor': 'blue'
+                            'backgroundColor': '#2d3038'
                         },
                         children=[
 
