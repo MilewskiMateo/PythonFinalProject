@@ -9,7 +9,7 @@
 body {
     color: #95969A !important;
     background-color: #23262E !important;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Times New Roman", Times, serif;
 }
 
 .banner {
@@ -21,6 +21,17 @@ body {
     width: 100%;
     margin-bottom: 10px;
     border-bottom: 1px solid #95969A;
+}
+.person {
+    background-color: #2d3038;
+    box-shadow:  0 1px 3px rgb(0 0 0 / 12%); 0 1px 2px rgb(0 0 0 / 24%);
+    border: none;
+    cursor: pointer;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.person:hover {
+    background-color: #42444B;
 }
 
 .banner h5 {

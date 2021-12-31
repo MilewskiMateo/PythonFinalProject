@@ -24,13 +24,14 @@ suffix_ooc_n = '_OOC_number'
 suffix_ooc_g = '_OOC_graph'
 suffix_indicator = '_indicator'
 
-def build_top_panel():
 
+def build_top_panel():
     return html.Div(
         id='metric-summary-session',
         style={
-        'height': '300px',
-        'width': '500px',
+            'marginTop': '20px',
+            'height': '500px',
+            'width': '900px',
         },
         children=[
             generate_metric_list_header(),
@@ -38,8 +39,8 @@ def build_top_panel():
                 id='metric_div',
                 style={
                     'height': 'calc(100% - 70px)',
-                    'overflow-x': 'scroll',
-                    'overflow-y': 'scroll'
+                    'overflow-x': 'hidden',
+                    'overflow-y': 'hidden'
                 },
                 children=[
                     generate_metric_row_helper(1),
@@ -54,8 +55,6 @@ def build_top_panel():
             )
         ]
     )
-
-
 
 
 # Build header
@@ -92,7 +91,10 @@ def generate_metric_list_header():
             'children': "Pass/Fail"
         })
 
-params = ['a','b','c','d','e','f','g','h']
+
+params = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+
 def generate_metric_row_helper(index):
     item = params[index]
 
@@ -171,7 +173,6 @@ def generate_metric_row_helper(index):
     )
 
 
-
 def generate_metric_row(id, style, col1, col2, col3, col4, col5, col6):
     if style is None:
         style = {
@@ -230,38 +231,63 @@ def generate_metric_row(id, style, col1, col2, col3, col4, col5, col6):
     )
 
 
-
+def personButton(name, chosenOne=False):
+    return html.Button(
+        id=name,
+        className='person',
+        children=[
+            html.Img(
+                id=name + 'avatar',
+                src= app.get_asset_url('personYellow.png') if chosenOne else app.get_asset_url('personBlue.png'),
+                style={'width': '70%'}
+            ),
+            html.Div(
+                id=name + 'label',
+                style={
+                    'marginTop': '20px',
+                    'color': '#95969A',
+                    'fontSize': '20px',
+                },
+                children=[
+                    name
+                ]
+            )
+        ]
+    )
 
 
 app.layout = html.Div([
     html.Div(
-        id = 'main_content_wrapper',
-        style = {
+        id='main_content_wrapper',
+        style={
             'display': 'grid',
             'gridTemplateColumns': '1fr 3fr',
-            'width':'100%',
+            'width': '100%',
             'height': '100vh',
         },
         children=[
             html.Div(
-                id = 'choose_person_wrapper',
-                style = {
+                id='choose_person_wrapper',
+                style={
                     'display': 'grid',
                     'gridTemplateColumns': '1fr 1fr',
                     'gridTemplateRows': '1fr 1fr 1fr',
-                    'backgroundColor': 'red',
+                    'backgroundColor': '#23262E',
                     'gap': '30px',
                     'padding': '20px',
                 },
                 children=[
-                html.Button(id='a1'),
-                html.Button(id='a2'),
-                html.Button(id='a3'),
+                    personButton('Tomek', True),
+                    personButton('Ania'),
+                    personButton('Sandra'),
+                    personButton('Szymon'),
+                    personButton('Mateusz'),
+                    personButton('Kacper'),
                 ]
             ),
             html.Div(
-                id = 'graphs_wrapper',
-                style = {
+                id='graphs_wrapper',
+                style={
                     'display': 'grid',
                     'gridTemplateColumns': '1fr',
                     'gridTemplateRows': '1fr 1fr',
@@ -276,8 +302,8 @@ app.layout = html.Div([
                         children=[
                             html.Div(
                                 id='status-container',
-                                style= {
-                                    'backgroundColor': 'green',
+                                style={
+                                    # 'backgroundColor': 'green',
                                 },
                                 children=[
                                     build_top_panel(),
@@ -285,8 +311,10 @@ app.layout = html.Div([
                             ),
                             html.Div(
                                 id='feet_wrapper',
-                                style = {
-                                    'backgroundColor': 'pink',
+                                style={
+                                    # 'backgroundColor': 'pink',
+                                    'marginTop': '20px',
+                                    'backgroundColor': '#2d3038',
                                     'display': 'flex',
                                     'justifyContent': 'center',
                                     'alignItems': 'center',
@@ -301,27 +329,22 @@ app.layout = html.Div([
                         ]
                     ),
                     html.Div(
-                            id='historic_data_wrapper',
-                            style={
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center',
-                                'backgroundColor': 'blue'
-                            },
-                            children=[
+                        id='historic_data_wrapper',
+                        style={
+                            'display': 'flex',
+                            'justifyContent': 'center',
+                            'alignItems': 'center',
+                            # 'backgroundColor': 'blue'
+                        },
+                        children=[
 
-                            ]
-                        )
+                        ]
+                    )
                 ]
             ),
         ]
     )
 ])
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)

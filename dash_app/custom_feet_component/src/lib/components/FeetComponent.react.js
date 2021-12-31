@@ -18,19 +18,8 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
         const leftValues = sensorValues.slice(0, 3);
         const rightValues = sensorValues.slice(3);
 
-        const mapValuesToStrokeWidth = (values) => {
-            const MAX_VALUE = 1023;
-            const a = 0.4;
-            const b = 1.5;
-
-            const avg = mean(values);
-            return avg / MAX_VALUE * (b - a) + a;
-        }
-
-        const [leftWidth, rightWidth] = [leftValues, rightValues].map(mapValuesToStrokeWidth);
-
-        leftFoot.attr('stroke-width', leftWidth);
-        rightFoot.attr('stroke-width', rightWidth);
+        leftFoot.attr('stroke-width', 1);
+        rightFoot.attr('stroke-width', 1);
     }, [...sensorValues]);
 
     // Display sensor values
@@ -38,7 +27,7 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
         const svg = d3.select('#feet-image');
         const r = 7;
         // TODO: Interpolate color value
-        const color = '#bd80aa';
+        const color = '#ffd15f';
 
 
         const positions = [
