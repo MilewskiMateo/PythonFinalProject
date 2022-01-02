@@ -9,13 +9,6 @@ app = dash.Dash(__name__)
 
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
 
-theme = {
-    'dark': True,
-    'detail': '#2d3038',  # Background-card
-    'primary': '#007439',  # Green
-    'secondary': '#FFD15F',  # Accent
-}
-
 suffix_row = '_row'
 suffix_button_id = '_button'
 suffix_sparkline_graph = '_sparkline_graph'
@@ -109,24 +102,30 @@ def generate_metric_row_helper(index):
             'children': dcc.Graph(
                 id=sparkline_graph_id,
                 style={
-                    'width': '60px',
-                    'height': '95%',
+                    'width': '100%',
+                    'height': '60%',
                 },
                 config={
-                    'staticPlot': False,
-                    'editable': False,
-                    'displayModeBar': False
+#                     'staticPlot': False,
+#                     'editable': False,
+                    'displayModeBar': False  #ukrywanie menu
                 },
                 figure=go.Figure({
-                    'data': [{'x': [], 'y': [], 'mode': 'lines+markers', 'name': item,
-                              'line': {'color': 'rgb(255,209,95)'}}],
+                    'data': [{'x': [1,2,3,4,5], 'y': [1,2,1,15,2], 'mode': 'lines+markers', 'line': {'color': 'rgb(255,209,95)'}}],
                     'layout': {
-                        'uirevision': True,
+#                         'uirevision': True,
                         'margin': dict(
-                            l=0, r=0, t=4, b=4, pad=0
+                            l=0, r=0, t=0, b=0, pad=0
                         ),
                         'paper_bgcolor': 'rgb(45, 48, 56)',
-                        'plot_bgcolor': 'rgb(45, 48, 56)'
+                        'plot_bgcolor': 'rgb(45, 48, 56)',
+                        'xaxis': {
+                            'visible': False
+                        },
+                        'yaxis' :{
+                           'visible': False
+
+                        }
                     }
                 }))
         },
@@ -135,18 +134,19 @@ def generate_metric_row_helper(index):
             'children':
                 daq.GraduatedBar(
                     id=ooc_graph_id,
-                    color={"gradient": True, "ranges": {"green": [0, 3], "yellow": [3, 7], "red": [7, 15]}},
+                    className='progress_bar',
+                    color={"gradient":True,"ranges":{"#4C78A8":[0,5],"FFd15f":[5,10]}},
                     showCurrentValue=False,
-                    max=15,
-                    value=0
+                    value=10,
+                    size= 140
                 )
         },
         {
             'id': item + '_pf',
             'children': daq.Indicator(
                 id=indicator_id,
-                value=True,
-                color=theme['primary']
+                value=False,
+                color='#ffd15f',
             )
         }
     )
@@ -231,7 +231,7 @@ app.layout = html.Div([
             'gap': '30px',
             'gridTemplateColumns': '1fr 3fr',
             'width': '100%',
-            'height': '100vh',
+            'height': '100%',
         },
         children=[
             html.Div(
@@ -259,6 +259,8 @@ app.layout = html.Div([
                     'gridTemplateColumns': '1fr',
                     'gridTemplateRows': '1fr 1fr',
                     'gap': '30px',
+                    'height': '92vh',
+                    'overflow': 'hidden'
                 },
                 children=[
                     html.Div(
@@ -300,13 +302,71 @@ app.layout = html.Div([
                         id='historic_data_wrapper',
                         style={
                             'display': 'flex',
+                            'flexDirection': 'column',
                             'justifyContent': 'center',
-                            'alignItems': 'center',
                             # 'backgroundColor': 'blue'
                             'backgroundColor': '#2d3038'
                         },
                         children=[
+                        html.Div(
+                            style= {
+                            'padding': '0 0 0 10px',
+                            'display': 'flex',
+                            'alignItems': 'flex-end'
+                            },
+                            children=[daq.BooleanSwitch(
+                                on=True,
+                                label="Anomalia",
+                                labelPosition="top",
+                                color='#FFd15f',
+                                style={
+                                'width': '200px',
+                                'marginTop': '10px',
+                                }
+                              ),
+                            dcc.Dropdown(
+                            id = 'dropdown',
+                                options=[
+                                    {'label': 'left foot front', 'value': 'L1'},
+                                    {'label': 'left foot middle', 'value': 'L2'},
+                                    {'label': 'left foot back', 'value': 'L3'},
+                                    {'label': 'right foot front', 'value': 'R1'},
+                                    {'label': 'right foot middle', 'value': 'R2'},
+                                    {'label': 'right foot back', 'value': 'R3'},
 
+                                ],
+                                style={
+                                 'backgroundColor': '#2d3038',
+                                 'width': '800px',
+                                },
+                                multi=True,
+                            ),
+                            ]
+                        ),
+                            dcc.Graph(
+                                     style={
+                                        'backgroundColor': '#2d3038',
+                                        'width': '100%',
+                                    },
+                                    id = 'HistGraph',
+                                    figure = {
+                                        'data' : [
+                                           {'x': [1,2,3,4,5], 'y': [1,2,1,15,2], 'mode': 'lines+markers'},
+                                           {'x': [1,2,3,4,5], 'y': [6,3,5,8,6], 'mode': 'lines+markers'},
+                                        ],
+                                        'layout' : go.Layout(
+                                            margin={'t': 30},
+                                            showlegend = True,
+                                            xaxis = {'title': 'X Label'},
+                                            yaxis = {'title': 'y Label'},
+                                            paper_bgcolor = 'rgb(45, 48, 56)',
+                                            plot_bgcolor = 'rgb(45, 48, 56)',
+                                            font_color="#FFd15f",
+                                            colorway = ['#4C78A8', '#3C6086', '#627F9E', '#517CB8', '#406393', '#49579D',],
+                                            height = 400,
+                                        )
+                                    }
+                                )
                         ]
                     )
                 ]
