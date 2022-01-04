@@ -21,19 +21,10 @@ suffix_indicator = '_indicator'
 def build_top_panel():
     return html.Div(
         id='metric-summary-session',
-        style={
-            'height': '500px',
-            'width': '900px',
-        },
         children=[
             generate_metric_list_header(),
             html.Div(
                 id='metric_div',
-                style={
-                    'height': 'calc(100% - 70px)',
-                    'overflow-x': 'hidden',
-                    'overflow-y': 'hidden'
-                },
                 children=[
                     generate_metric_row_helper(0),
                     generate_metric_row_helper(1),
@@ -225,24 +216,9 @@ def personButton(name, chosenOne=False):
 app.layout = html.Div([
     html.Div(
         id='main_content_wrapper',
-        style={
-            'display': 'grid',
-            'padding': '30px',
-            'gap': '30px',
-            'gridTemplateColumns': '1fr 3fr',
-            'width': '100%',
-            'height': '100%',
-        },
         children=[
             html.Div(
                 id='choose_person_wrapper',
-                style={
-                    'display': 'grid',
-                    'gridTemplateColumns': '1fr 1fr',
-                    'gridTemplateRows': '1fr 1fr 1fr',
-                    'backgroundColor': '#23262E',
-                    'gap': '30px',
-                },
                 children=[
                     personButton('Tomek', True),
                     personButton('Ania'),
@@ -254,22 +230,9 @@ app.layout = html.Div([
             ),
             html.Div(
                 id='graphs_wrapper',
-                style={
-                    'display': 'grid',
-                    'gridTemplateColumns': '1fr',
-                    'gridTemplateRows': '1fr 1fr',
-                    'gap': '30px',
-                    'height': '92vh',
-                    'overflow': 'hidden'
-                },
                 children=[
                     html.Div(
                         id='actual_data_wrapper',
-                        style={
-                            'display': 'grid',
-                            'gridTemplateColumns': '2fr 1fr',
-                            'gap': '30px',
-                        },
                         children=[
                             html.Div(
                                 id='status-container',
@@ -282,13 +245,6 @@ app.layout = html.Div([
                             ),
                             html.Div(
                                 id='feet_wrapper',
-                                style={
-                                    # 'backgroundColor': 'pink',
-                                    'backgroundColor': '#2d3038',
-                                    'display': 'flex',
-                                    'justifyContent': 'center',
-                                    'alignItems': 'center',
-                                },
                                 children=[
                                     custom_feet_component.FeetComponent(
                                         id='feet_component',
@@ -300,13 +256,6 @@ app.layout = html.Div([
                     ),
                     html.Div(
                         id='historic_data_wrapper',
-                        style={
-                            'display': 'flex',
-                            'flexDirection': 'column',
-                            'justifyContent': 'center',
-                            # 'backgroundColor': 'blue'
-                            'backgroundColor': '#2d3038'
-                        },
                         children=[
                         html.Div(
                             style= {
@@ -344,10 +293,6 @@ app.layout = html.Div([
                             ]
                         ),
                             dcc.Graph(
-                                     style={
-                                        'backgroundColor': '#2d3038',
-                                        'width': '100%',
-                                    },
                                     id = 'HistGraph',
                                     figure = {
                                         'data' : [

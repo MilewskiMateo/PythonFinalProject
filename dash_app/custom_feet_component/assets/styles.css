@@ -27,17 +27,80 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
+
 .Select--multi .Select-value {
     color: #4C78A8;
     border: 1px solid #4C78A8
 }
-.is-focused:not(.is-open)>.Select-control {
+
+.is-focused:not(.is-open) > .Select-control {
     border: 1px solid #4C78A8
 }
 
+#metric-summary-session {
+    height: 500px;
+    width: 900px;
+}
+
+#metric_div {
+    height: calc(100% - 70px);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#main_content_wrapper {
+    display: grid;
+    padding: 30px;
+    gap: 30px;
+    grid-template-columns: 1fr 3fr;
+    width: 100%;
+    height: 100%;
+}
+
+#choose_person_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    background-color: #23262E;
+    gap: 30px;
+}
+
+#graphs_wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 30px;
+    height: 92vh;
+    overflow: hidden;
+}
+
+#actual_data_wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+#feet_wrapper {
+    background-color: #2d3038;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#historic_data_wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #2d3038;
+}
 
 .progress_bar > div > div {
     background-color: #1e2130 !important;
+}
+
+#HistGraph {
+    background-color: #2d3038;
+    width: 100%;
 }
 
 .metric-row > div {
