@@ -1,11 +1,12 @@
+import custom_feet_component
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
-from custom_feet_component import FeetComponent
 
 app = dash.Dash(__name__)
+
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
 
 suffix_row = '_row'
@@ -319,6 +320,5 @@ app.layout = html.Div([
     )
 ])
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run_server(debug=True, host="0.0.0.0")

@@ -1,0 +1,13 @@
+Package: customFeetComponent
+Title: custom feet pressure component
+Version: 0.0.1
+Description: custom feet pressure component
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License:  + file LICENSE
+URL: https://github.com/MilewskiMateo/custom-feet-component
+BugReports: https://github.com/MilewskiMateo/custom-feet-component/issues
+Encoding: UTF-8
+LazyData: true
+KeepSource: true
