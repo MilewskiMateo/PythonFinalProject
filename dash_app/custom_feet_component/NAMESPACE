@@ -1,4 +1,3 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
-export(fccFeetComponent)
-export(FeetComponent)
+export('fcc'FeetComponent)
