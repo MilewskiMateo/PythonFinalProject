@@ -1,15 +1,19 @@
 from __future__ import absolute_import
-
+import redis
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
-
+import json
 import custom_feet_component
 
 app = dash.Dash(__name__)
+redis_connection = redis.Redis(host="pythonfinalproject_redis_1")
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
+
+redis_data = json.loads(redis_connection.lrange("patient_1", 0, -1)[0])
+names = [json.loads(redis_connection.lrange(f"patient_{id}", 0, 1)[0])['firstname'] for id in range(1,7) ]
 
 suffix_row = '_row'
 suffix_button_id = '_button'
@@ -191,14 +195,16 @@ def generate_metric_row(id, style, col2, col3, col5, col6):
     )
 
 
-def personButton(name, chosenOne=False):
+def personButton(name):
     return html.Button(
         id=name,
         className='person',
+        n_clicks=0,
         children=[
             html.Img(
                 id=name + 'avatar',
-                src= app.get_asset_url('personYellow.png') if chosenOne else app.get_asset_url('personBlue.png'),
+                # src= app.get_asset_url('personYellow.png') if isChosen else app.get_asset_url('personBlue.png'),
+                src= app.get_asset_url('personBlue.png'),
                 style={'width': '70%'}
             ),
             html.Div(
@@ -219,15 +225,13 @@ app.layout = html.Div([
     html.Div(
         id='main_content_wrapper',
         children=[
+            # html.Div(
+            #     children = [str(names)]
+            # ),
             html.Div(
                 id='choose_person_wrapper',
                 children=[
-                    personButton('Tomek', True),
-                    personButton('Ania'),
-                    personButton('Sandra'),
-                    personButton('Szymon'),
-                    personButton('Mateusz'),
-                    personButton('Kacper'),
+                    personButton(name) for name in names
                 ]
             ),
             html.Div(
@@ -322,6 +326,21 @@ app.layout = html.Div([
     )
 ])
 
+
+
+# @app.callback(
+#     Output('Janekavatar', 'src'),
+#     Input('Janek', 'n_clicks', 'id'),
+#     Input('Elżbieta', 'n_clicks', 'id'),
+#     Input('Albert', 'n_clicks', 'id'),
+#     Input('Ewelina', 'n_clicks', 'id'),
+#     Input('Piotr', 'n_clicks', 'id'),
+#     Input('Bartosz', 'n_clicks', 'id'),
+# )
+# def change_person(n_clicks):
+#     if n_clicks > 0:
+#         return app.get_asset_url('personYellow.png')
+#     return app.get_asset_url('personBlue.png')
 
 if __name__ == "__main__":
     app.run_server(debug=True, host="0.0.0.0")
