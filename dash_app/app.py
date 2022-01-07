@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
-from custom_feet_component import FeetComponent
+
+import custom_feet_component
 
 app = dash.Dash(__name__)
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
