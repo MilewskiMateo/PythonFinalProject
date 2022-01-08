@@ -194,6 +194,13 @@ def generate_metric_row(passed_id, style, col2, col3, col5, col6):
 
 
 app.layout = html.Div([
+    dcc.Interval(
+        id='data_updater',
+    ),
+    html.Div(
+        id='test_data',
+        children=[]
+    ),
     html.Div(
         id='main_content_wrapper',
         children=[
@@ -201,7 +208,7 @@ app.layout = html.Div([
             #     children = [str(names)]
             # ),
             custom_people_component.PeopleComponent(
-                id='input',
+                id='',
                 value='Janek',
                 names=['Janek', 'Ela', 'Szymon', 'Tomek', 'Ania', 'Hania']
             ),
@@ -295,6 +302,21 @@ app.layout = html.Div([
         ]
     )
 ])
+
+@app.callback(
+    Output('test_data', 'children'),
+    Input('data_updater', 'n_intervals')
+)
+
+@app.callback(
+    Output('test_data', 'children'),
+    Input('data_updater', 'n_intervals')
+)
+def update_data(n_intervals):
+    current_patient = "patient_1"
+    patient_data = json.loads(redis_connection.lrange(current_patient, 0, -1))
+    patient_sensors_data = [d['sensors'] for d in patient_data]
+    return [str(patient_sensors_data)]
 
 if __name__ == "__main__":
     app.run_server(debug=True, host="0.0.0.0")
