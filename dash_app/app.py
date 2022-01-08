@@ -196,44 +196,12 @@ def generate_metric_row(id, style, col2, col3, col5, col6):
     )
 
 
-def personButton(name):
-    return html.Button(
-        id=name,
-        className='person',
-        n_clicks=0,
-        children=[
-            html.Img(
-                id=name + 'avatar',
-                # src= app.get_asset_url('personYellow.png') if isChosen else app.get_asset_url('personBlue.png'),
-                src= app.get_asset_url('personBlue.png'),
-                style={'width': '70%'}
-            ),
-            html.Div(
-                id=name + 'label',
-                style={
-                    'color': '#95969A',
-                    'fontSize': '20px',
-                },
-                children=[
-                    name
-                ]
-            )
-        ]
-    )
-
-
 app.layout = html.Div([
     html.Div(
         id='main_content_wrapper',
         children=[
             # html.Div(
             #     children = [str(names)]
-            # ),
-            # html.Div(
-            #     id='choose_person_wrapper',
-            #     children=[
-            #         personButton(name) for name in names
-            #     ]
             # ),
             custom_people_component.PeopleComponent(
                 id='input',
@@ -249,7 +217,6 @@ app.layout = html.Div([
                             html.Div(
                                 id='status-container',
                                 style={
-                                    # 'backgroundColor': 'green',
                                 },
                                 children=[
                                     build_top_panel(),
@@ -331,22 +298,6 @@ app.layout = html.Div([
         ]
     )
 ])
-
-
-
-# @app.callback(
-#     Output('Janekavatar', 'src'),
-#     Input('Janek', 'n_clicks', 'id'),
-#     Input('Elżbieta', 'n_clicks', 'id'),
-#     Input('Albert', 'n_clicks', 'id'),
-#     Input('Ewelina', 'n_clicks', 'id'),
-#     Input('Piotr', 'n_clicks', 'id'),
-#     Input('Bartosz', 'n_clicks', 'id'),
-# )
-# def change_person(n_clicks):
-#     if n_clicks > 0:
-#         return app.get_asset_url('personYellow.png')
-#     return app.get_asset_url('personBlue.png')
 
 if __name__ == "__main__":
     app.run_server(debug=True, host="0.0.0.0")
