@@ -7,13 +7,14 @@ import plotly.graph_objs as go
 import dash_daq as daq
 import json
 import custom_feet_component
+import custom_people_component
 
 app = dash.Dash(__name__)
 redis_connection = redis.Redis(host="pythonfinalproject_redis_1")
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
 
-redis_data = json.loads(redis_connection.lrange("patient_1", 0, -1)[0])
-names = [json.loads(redis_connection.lrange(f"patient_{id}", 0, 1)[0])['firstname'] for id in range(1,7) ]
+# redis_data = json.loads(redis_connection.lrange("patient_1", 0, -1)[0])
+# names = [json.loads(redis_connection.lrange(f"patient_{id}", 0, 1)[0])['firstname'] for id in range(1,7) ]
 
 suffix_row = '_row'
 suffix_button_id = '_button'
@@ -228,11 +229,16 @@ app.layout = html.Div([
             # html.Div(
             #     children = [str(names)]
             # ),
-            html.Div(
-                id='choose_person_wrapper',
-                children=[
-                    personButton(name) for name in names
-                ]
+            # html.Div(
+            #     id='choose_person_wrapper',
+            #     children=[
+            #         personButton(name) for name in names
+            #     ]
+            # ),
+            custom_people_component.PeopleComponent(
+                id='input',
+                value='Janek',
+                names=['Janek', 'Ela', 'Szymon', 'Tomek', 'Ania', 'Hania']
             ),
             html.Div(
                 id='graphs_wrapper',
