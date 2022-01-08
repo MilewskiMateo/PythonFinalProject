@@ -94,14 +94,17 @@ body {
 }
 
 .progress_bar > div > div {
-    background-color: #1e2130 !important;
+    background-color: #2d3038 !important;
+    border: 1px solid #95969A;
 }
 
 #HistGraph {
     background-color: #2d3038;
     width: 100%;
 }
-
+.Indicator {
+    background-color: #4C78A8;
+}
 .metric-row > div {
     display: flex;
     justify-content: center;

@@ -23,6 +23,7 @@ class DataCollector:
         logger.info("Data collector started running")
         while True:
             for id in range(1, 7):
+                # logger.info(len(self.queue.jobs))
                 self.queue.enqueue(get_data, self.base_url, id, result_ttl=0)
             self.delete_data()
             time.sleep(1)

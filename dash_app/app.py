@@ -8,13 +8,17 @@ import dash_daq as daq
 import json
 import custom_feet_component
 import custom_people_component
-
+import time
+from enum import Enum
+from datetime import datetime
 app = dash.Dash(__name__)
 redis_connection = redis.Redis(host="pythonfinalproject_redis_1")
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
 
-# redis_data = json.loads(redis_connection.lrange("patient_1", 0, -1)[0])
-# names = [json.loads(redis_connection.lrange(f"patient_{id}", 0, 1)[0])['firstname'] for id in range(1,7) ]
+while not all([redis_connection.lindex(f"patient_{id}", 0) for id in range(1,7)]):
+    time.sleep(1)
+
+names = [json.loads(redis_connection.lindex(f"patient_{id}", 0))['firstname'] for id in range(1,7)]
 
 suffix_row = '_row'
 suffix_button_id = '_button'
@@ -45,7 +49,6 @@ def build_top_panel():
     )
 
 
-# Build header
 def generate_metric_list_header():
     return generate_metric_row(
         'metric_header',
@@ -72,8 +75,14 @@ def generate_metric_list_header():
         })
 
 
-params = ['sensor 1', 'sensor 2', 'sensor 3', 'sensor 4', 'sensor 5', 'sensor 6']
-
+params = [
+    "left foot front",
+    "left foot middle",
+    "left foot back",
+    "right foot front",
+    "right foot middle",
+    "right foot back"
+]
 
 def generate_metric_row_helper(index):
     item = params[index]
@@ -139,6 +148,7 @@ def generate_metric_row_helper(index):
         {
             'id': item + '_pf',
             'children': daq.Indicator(
+                className ='Indicator',
                 id=indicator_id,
                 value=False,
                 color='#ffd15f',
@@ -198,19 +208,12 @@ app.layout = html.Div([
         id='data_updater',
     ),
     html.Div(
-        id='test_data',
-        children=[]
-    ),
-    html.Div(
         id='main_content_wrapper',
         children=[
-            # html.Div(
-            #     children = [str(names)]
-            # ),
             custom_people_component.PeopleComponent(
-                id='',
+                id='people_component',
                 value='Janek',
-                names=['Janek', 'Ela', 'Szymon', 'Tomek', 'Ania', 'Hania']
+                names = names
             ),
             html.Div(
                 id='graphs_wrapper',
@@ -259,12 +262,12 @@ app.layout = html.Div([
                                     dcc.Dropdown(
                                         id='dropdown',
                                         options=[
-                                            {'label': 'left foot front', 'value': 'L1'},
-                                            {'label': 'left foot middle', 'value': 'L2'},
-                                            {'label': 'left foot back', 'value': 'L3'},
-                                            {'label': 'right foot front', 'value': 'R1'},
-                                            {'label': 'right foot middle', 'value': 'R2'},
-                                            {'label': 'right foot back', 'value': 'R3'},
+                                            {'label': 'left foot front', 'value': 0},
+                                            {'label': 'left foot middle', 'value': 1},
+                                            {'label': 'left foot back', 'value': 2},
+                                            {'label': 'right foot front', 'value': 3},
+                                            {'label': 'right foot middle', 'value': 4},
+                                            {'label': 'right foot back', 'value': 5},
 
                                         ],
                                         style={
@@ -290,7 +293,6 @@ app.layout = html.Div([
                                         paper_bgcolor='rgb(45, 48, 56)',
                                         plot_bgcolor='rgb(45, 48, 56)',
                                         font_color="#FFd15f",
-                                        colorway=['#4C78A8', '#3C6086', '#627F9E', '#517CB8', '#406393', '#49579D', ],
                                         height=400,
                                     )
                                 }
@@ -303,20 +305,203 @@ app.layout = html.Div([
     )
 ])
 
-@app.callback(
-    Output('test_data', 'children'),
-    Input('data_updater', 'n_intervals')
-)
+class PatientsEnum(str, Enum):
+    Janek = 1
+    Elżbieta = 2
+    Albert = 3
+    Ewelina = 4
+    Piotr = 5 
+    Bartosz = 6
+
+dropdown_traces_values = {
+    0: "left foot front",
+    1: "left foot middle",
+    2: "left foot back",
+    3: "right foot front",
+    4: "right foot middle",
+    5: "right foot back"
+}
+
 
 @app.callback(
-    Output('test_data', 'children'),
-    Input('data_updater', 'n_intervals')
+    Output('feet_component', 'sensorValues'),
+    Input('data_updater', 'n_intervals'),
+    Input('people_component', 'value')
 )
-def update_data(n_intervals):
-    current_patient = "patient_1"
-    patient_data = json.loads(redis_connection.lrange(current_patient, 0, -1))
-    patient_sensors_data = [d['sensors'] for d in patient_data]
-    return [str(patient_sensors_data)]
+def update_foot_data(n_intervals, value):
+    # return [n_intervals,0,0,0,0,0]
+    raw_data = redis_connection.lindex(f'patient_{PatientsEnum[value]}', 0)
+    if raw_data is None:
+        return [0,0,0,0,0,0]
+    patient_current_data = json.loads(raw_data)
+    return [value_object['value'] for value_object in patient_current_data['trace']['sensors']]
+
+
+# [
+#     {'x': [1, 2, 3, 4, 5], 'y': [1, 2, 1, 15, 2], 'mode': 'lines+markers'},
+#     {'x': [1, 2, 3, 4, 5], 'y': [6, 3, 5, 8, 6], 'mode': 'lines+markers'},
+# ],
+
+@app.callback(
+    Output('HistGraph', 'figure'),
+    Input('data_updater', 'n_intervals'),
+    Input('people_component', 'value'),
+    Input('dropdown', 'value')
+)
+def update_graph_data(n_intervals, current_patient, selected_traces):
+    raw_data = redis_connection.lrange(f'patient_{PatientsEnum[current_patient]}', 0, -1)
+
+    timestamps = [datetime.fromtimestamp(json.loads(raw_data_obj)['timestamp']) for raw_data_obj in raw_data]
+
+    if selected_traces is None:
+        traces = []
+    else:
+        traces = [
+            {
+                'name': dropdown_traces_values[trace_id],
+                'x': timestamps,
+                'y': [json.loads(raw_data_obj)['trace']['sensors'][trace_id]['value'] for raw_data_obj in raw_data],
+                'mode': 'lines+markers'
+            }
+            for trace_id in selected_traces
+        ]
+
+    return {
+    'data': traces,
+    'layout': go.Layout(
+            margin={'t': 30},
+            showlegend=True,
+            xaxis={'title': 'Timestamp'},
+            yaxis={'title': 'Sensor value'},
+            paper_bgcolor='rgb(45, 48, 56)',
+            plot_bgcolor='rgb(45, 48, 56)',
+            font_color="#FFd15f",
+            height=400,
+        )
+    }
+
+
+
+
+@app.callback(
+    Output('left foot front_OOC_graph', 'value'),
+    Output('left foot middle_OOC_graph', 'value'),
+    Output('left foot back_OOC_graph', 'value'),
+    Output('right foot front_OOC_graph', 'value'),
+    Output('right foot middle_OOC_graph', 'value'),
+    Output('right foot back_OOC_graph', 'value'),
+    Output('left foot front_indicator', 'value'),
+    Output('left foot middle_indicator', 'value'),
+    Output('left foot back_indicator', 'value'),
+    Output('right foot front_indicator', 'value'),
+    Output('right foot middle_indicator', 'value'),
+    Output('right foot back_indicator', 'value'),
+    Input('data_updater', 'n_intervals'),
+    Input('people_component', 'value')
+)
+def update_progress_bars_and_anomaly_indicator(n_intervals, current_patient):
+    raw_data = redis_connection.lindex(f'patient_{PatientsEnum[current_patient]}', 0)
+    if raw_data is None:
+        return  0,0,0,0,0,0,False, False, False, False, False, False
+    patient_current_data = json.loads(raw_data)
+    return tuple(
+        [
+            value_object['value'] * 10 // 1023
+            for value_object in patient_current_data['trace']['sensors']
+        ] + [
+            value_object['anomaly']
+            for value_object in patient_current_data['trace']['sensors']
+        ]
+    )
+
+
+
+@app.callback(
+    Output('left foot front_sparkline_graph', 'figure'),
+    Output('left foot middle_sparkline_graph', 'figure'),
+    Output('left foot back_sparkline_graph', 'figure'),
+    Output('right foot front_sparkline_graph', 'figure'),
+    Output('right foot middle_sparkline_graph', 'figure'),
+    Output('right foot back_sparkline_graph', 'figure'),
+    Input('data_updater', 'n_intervals'),
+    Input('people_component', 'value')
+)
+def update_small_graphs(n_intervals, current_patient):
+    raw_data = redis_connection.lrange(f'patient_{PatientsEnum[current_patient]}', 0, 50)
+    timestamps = [datetime.fromtimestamp(json.loads(raw_data_obj)['timestamp']) for raw_data_obj in raw_data]
+    return tuple([go.Figure({
+        'data': [{'x': timestamps, 'y': [json.loads(raw_data_obj)['trace']['sensors'][n]['value'] for raw_data_obj in raw_data],
+                    'mode': 'lines+markers',
+                    'line': {'color': 'rgb(255,209,95)'}}],
+        'layout': {
+            'margin': dict(
+                l=0, r=0, t=0, b=0, pad=0
+            ),
+            'paper_bgcolor': 'rgb(45, 48, 56)',
+            'plot_bgcolor': 'rgb(45, 48, 56)',
+            'xaxis': {
+                'visible': False
+            },
+            'yaxis': {
+                'visible': False
+
+            }
+        }
+    }) for n in range(6)])
+
+
+
+
+
+# {
+#   "birthdate": "1976",
+#   "disabled": true,
+#   "firstname": "El\u017cbieta",
+#   "id": 12,
+#   "lastname": "Kochalska",
+#   "trace": {
+#     "id": 13571805062019,
+#     "name": "ela",
+#     "sensors": [
+#       {
+#         "anomaly": false,
+#         "id": 0,
+#         "name": "L0",
+#         "value": 1023
+#       },
+#       {
+#         "anomaly": false,
+#         "id": 1,
+#         "name": "L1",
+#         "value": 1023
+#       },
+#       {
+#         "anomaly": false,
+#         "id": 2,
+#         "name": "L2",
+#         "value": 1023
+#       },
+#       {
+#         "anomaly": false,
+#         "id": 3,
+#         "name": "R0",
+#         "value": 13
+#       },
+#       {
+#         "anomaly": false,
+#         "id": 4,
+#         "name": "R1",
+#         "value": 11
+#       },
+#       {
+#         "anomaly": false,
+#         "id": 5,
+#         "name": "R2",
+#         "value": 13
+#       }
+#     ]
+#   }
+# }
 
 if __name__ == "__main__":
     app.run_server(debug=True, host="0.0.0.0")
