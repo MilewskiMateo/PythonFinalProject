@@ -2,6 +2,25 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #FFd15f; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cca33c; 
+  }
+
 body {
     color: #95969A !important;
     background-color: #23262E !important;
@@ -38,13 +57,13 @@ body {
 }
 
 #metric-summary-session {
-    height: 500px;
+
 }
 
 #metric_div {
     height: calc(100% - 70px);
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 #main_content_wrapper {
@@ -57,11 +76,17 @@ body {
 }
 
 #choose_person_wrapper {
+    flex-grow: 10;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     background-color: #23262E;
     gap: 30px;
+}
+#left_sideWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px
 }
 
 #graphs_wrapper {
@@ -71,6 +96,14 @@ body {
     gap: 30px;
     height: 92vh;
     overflow: hidden;
+}
+.play_button {
+    background-color: #2d3038;
+    border: none;
+    height: 200px;
+}
+.play_button:hover {
+    background-color: #42444B;
 }
 
 #actual_data_wrapper {

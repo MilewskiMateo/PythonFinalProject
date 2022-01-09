@@ -15,13 +15,13 @@ Keyword arguments:
 - className (string; optional):
     CSS classes added to the main div.
 
-- height (number; default 350):
+- height (number; default 450):
     Height of the component in px.
 
 - sensorValues (list of numbers; default [0, 0, 0, 0, 0, 0]):
     Feet pressure sensor values.
 
-- width (number; default 350):
+- width (number; default 450):
     Width of the component in px."""
     @_explicitize_args
     def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, width=Component.UNDEFINED, height=Component.UNDEFINED, sensorValues=Component.UNDEFINED, **kwargs):

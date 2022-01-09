@@ -8,6 +8,7 @@ import dash_daq as daq
 import json
 import custom_feet_component
 import custom_people_component
+import custom_play_component
 import time
 from enum import Enum
 from datetime import datetime
@@ -201,8 +202,17 @@ app.layout = html.Div(
         html.Div(
             id="main_content_wrapper",
             children=[
-                custom_people_component.PeopleComponent(
-                    id="people_component", value="Janek", names=names
+                html.Div(
+                    id='left_sideWrapper',
+                    children=[
+                        custom_play_component.PlayComponent(
+                          id="play_component",
+                          value=False,  
+                        ),
+                        custom_people_component.PeopleComponent(
+                            id="people_component", value="Janek", names=names
+                        )
+                    ]
                 ),
                 html.Div(
                     id="graphs_wrapper",
@@ -260,7 +270,8 @@ app.layout = html.Div(
                                                     "label": "left foot middle",
                                                     "value": 1,
                                                 },
-                                                {"label": "left foot back", "value": 2},
+                                                {"label": "left foot back",
+                                                    "value": 2},
                                                 {
                                                     "label": "right foot front",
                                                     "value": 3,
@@ -384,7 +395,8 @@ def update_graph_data(n_intervals, current_patient, selected_traces, anomaly):
                 "name": dropdown_traces_values[trace_id],
                 "x": timestamps,
                 "y": [
-                    json.loads(raw_data_obj)["trace"]["sensors"][trace_id]["value"]
+                    json.loads(raw_data_obj)[
+                        "trace"]["sensors"][trace_id]["value"]
                     for raw_data_obj in raw_data
                 ],
                 "mode": "lines+markers",
@@ -424,7 +436,8 @@ def update_graph_data(n_intervals, current_patient, selected_traces, anomaly):
     Input("people_component", "value"),
 )
 def update_progress_bars_and_anomaly_indicator(n_intervals, current_patient):
-    raw_data = redis_connection.lindex(f"patient_{PatientsEnum[current_patient]}", 0)
+    raw_data = redis_connection.lindex(
+        f"patient_{PatientsEnum[current_patient]}", 0)
     if raw_data is None:
         return 0, 0, 0, 0, 0, 0, False, False, False, False, False, False
     patient_current_data = json.loads(raw_data)
@@ -466,7 +479,8 @@ def update_small_graphs(n_intervals, current_patient):
                         {
                             "x": timestamps,
                             "y": [
-                                json.loads(raw_data_obj)["trace"]["sensors"][n]["value"]
+                                json.loads(raw_data_obj)[
+                                    "trace"]["sensors"][n]["value"]
                                 for raw_data_obj in raw_data
                             ],
                             "mode": "lines+markers",
@@ -485,7 +499,13 @@ def update_small_graphs(n_intervals, current_patient):
             for n in range(6)
         ]
     )
-
+    
+@app.callback(
+Output("data_updater", "disabled"),
+Input("play_component", "value"),
+)
+def play_pause_app(value):
+    return value
 
 if __name__ == "__main__":
-    app.run_server(debug=True, host="0.0.0.0")
+    app.run_server(host="0.0.0.0")

@@ -25,7 +25,7 @@
         "required": false,
         "description": "Width of the component in px",
         "defaultValue": {
-          "value": "350",
+          "value": "450",
           "computed": false
         }
       },
@@ -36,7 +36,7 @@
         "required": false,
         "description": "Height of the component in px",
         "defaultValue": {
-          "value": "350",
+          "value": "450",
           "computed": false
         }
       },

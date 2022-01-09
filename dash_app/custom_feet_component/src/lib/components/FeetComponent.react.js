@@ -1,20 +1,9 @@
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import FeetSVG from '../../images/feet.svg';
+import FeetSVG from '../../images/stopy.svg';
 import * as d3 from "d3";
 
 const FeetComponent = ({ id, className, setProps, width, height, sensorValues }) => {
-    useEffect(() => {
-        const svg = d3.select('#feet-image');
-        const wholeImage = svg.select('g');
-        const rightFoot = wholeImage.select('path');
-        const leftFoot = wholeImage.select('g');
-
-        leftFoot.attr('stroke-width', 1);
-        leftFoot.attr('fill', '#FFd15f');
-        rightFoot.attr('stroke-width', 1);
-        rightFoot.attr('fill', '#FFd15f');
-    }, [...sensorValues]);
 
     useEffect(() => {
         const svg = d3.select('#feet-image');
@@ -40,17 +29,17 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
                 .attr('cx', `${x}%`)
                 .attr('cy', `${y}%`)
                 .attr('r', `${r}%`)
-                .attr('stroke-width', 0.5)
+                .attr('stroke-width', 1.2)
                 .style('stroke', '#000000')
                 .style('fill', '#4C78A8');
 
             const transleteY = r * 0.29;
             g.append('text')
                 .attr('x', `${x}%`)
-                .attr('y', `${y}%`)
-                .attr('transform', `translate(0 ${transleteY})`)
+                .attr('y', `${y +1.5}%`)
+                .attr('transform', `translate(-50%)`)
                 .attr('text-anchor', 'middle')
-                .style('font-size', `${r}px`)
+                .style('font-size', `20px`)
                 .text(value);
         }
 
@@ -70,8 +59,8 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
 }
 
 FeetComponent.defaultProps = {
-    width: 350,
-    height: 350,
+    width: 450,
+    height: 450,
     sensorValues: [0, 0, 0, 0, 0, 0]
 };
 

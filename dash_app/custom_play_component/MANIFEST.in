@@ -1,0 +1,11 @@
+include custom_play_component/custom_play_component.min.js
+include custom_play_component/custom_play_component.min.js.map
+include custom_play_component/async-*.js
+include custom_play_component/async-*.js.map
+include custom_play_component/*-shared.js
+include custom_play_component/*-shared.js.map
+include custom_play_component/metadata.json
+include custom_play_component/package-info.json
+include README.md
+include LICENSE
+include package.json
