@@ -239,7 +239,8 @@ app.layout = html.Div(
                                     },
                                     children=[
                                         daq.BooleanSwitch(
-                                            on=True,
+                                            id="anomaly_switch",
+                                            on=False,
                                             label="Anomalia",
                                             labelPosition="top",
                                             color="#FFd15f",
@@ -358,11 +359,17 @@ def update_foot_data(n_intervals, value):
     Input("data_updater", "n_intervals"),
     Input("people_component", "value"),
     Input("dropdown", "value"),
+    Input("anomaly_switch", "on"),
 )
-def update_graph_data(n_intervals, current_patient, selected_traces):
-    raw_data = redis_connection.lrange(
-        f"patient_{PatientsEnum[current_patient]}", 0, -1
-    )
+def update_graph_data(n_intervals, current_patient, selected_traces, anomaly):
+    if anomaly:
+        raw_data = redis_connection.lrange(
+            f"patient_{PatientsEnum[current_patient]}_anomaly", 0, -1
+        )
+    else:
+        raw_data = redis_connection.lrange(
+            f"patient_{PatientsEnum[current_patient]}", 0, -1
+        )
 
     timestamps = [
         datetime.fromtimestamp(json.loads(raw_data_obj)["timestamp"])

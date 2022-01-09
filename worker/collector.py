@@ -20,4 +20,13 @@ def get_data(base_url, id):
     else:
         data = response.json()
         data["timestamp"] = time.time()
+        if is_anomaly(data):
+            connection.lpush(f"patient_{id}_anomaly", json.dumps(data))
         connection.lpush(f"patient_{id}", json.dumps(data))
+
+
+def is_anomaly(data: dict):
+    sensors_anomaly_values = [
+        sensor_data["anomaly"] for sensor_data in data["trace"]["sensors"]
+    ]
+    return any(sensors_anomaly_values)
