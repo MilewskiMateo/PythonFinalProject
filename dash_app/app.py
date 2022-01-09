@@ -16,6 +16,7 @@ redis_connection = redis.Redis(host="pythonfinalproject_redis_1")
 sensor_values_mock = [896, 568, 708, 23, 0, 5]
 
 while not all([redis_connection.lindex(f"patient_{id}", 0) for id in range(1,7)]):
+    app.logger.info("Waiting for redis...")
     time.sleep(1)
 
 names = [json.loads(redis_connection.lindex(f"patient_{id}", 0))['firstname'] for id in range(1,7)]

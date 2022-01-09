@@ -21,6 +21,7 @@ class DataCollector:
 
     def run(self):
         logger.info("Data collector started running")
+        logger.info("Please, make sure you are connected to VPN")
         while True:
             for id in range(1, 7):
                 # logger.info(len(self.queue.jobs))
