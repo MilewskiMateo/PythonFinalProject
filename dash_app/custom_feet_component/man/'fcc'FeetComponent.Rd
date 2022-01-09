@@ -6,7 +6,7 @@
 \title{FeetComponent component}
 
 \description{
-Custom component for displaying sensors position on the feet and their current value
+
 }
 
 \usage{

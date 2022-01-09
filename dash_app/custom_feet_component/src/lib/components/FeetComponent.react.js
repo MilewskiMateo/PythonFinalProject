@@ -3,19 +3,12 @@ import PropTypes from 'prop-types';
 import FeetSVG from '../../images/feet.svg';
 import * as d3 from "d3";
 
-/**
- * Custom component for displaying sensors position on the feet and their current value
- */
 const FeetComponent = ({ id, className, setProps, width, height, sensorValues }) => {
-    // Format image (make stroke change on average sensor value)
     useEffect(() => {
         const svg = d3.select('#feet-image');
         const wholeImage = svg.select('g');
         const rightFoot = wholeImage.select('path');
         const leftFoot = wholeImage.select('g');
-
-        const leftValues = sensorValues.slice(0, 3);
-        const rightValues = sensorValues.slice(3);
 
         leftFoot.attr('stroke-width', 1);
         leftFoot.attr('fill', '#FFd15f');
@@ -23,13 +16,9 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
         rightFoot.attr('fill', '#FFd15f');
     }, [...sensorValues]);
 
-    // Display sensor values
     useEffect(() => {
         const svg = d3.select('#feet-image');
         const r = 6;
-        // TODO: Interpolate color value
-        const color = '#4C78A8';
-
 
         const positions = [
             { x: 32, y: 33 },
@@ -53,7 +42,7 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
                 .attr('r', `${r}%`)
                 .attr('stroke-width', 0.5)
                 .style('stroke', '#000000')
-                .style('fill', color);
+                .style('fill', '#4C78A8');
 
             const transleteY = r * 0.29;
             g.append('text')
@@ -65,7 +54,6 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
                 .text(value);
         }
 
-        // Cleanup
         return () => {
             const svg = d3.select('#feet-image');
             svg.selectAll('.sensor-value').remove();
@@ -74,7 +62,6 @@ const FeetComponent = ({ id, className, setProps, width, height, sensorValues })
 
     return (
         <div id={id} className={className}>
-            {/* Image container */}
             <div style={{ width: width, height: height }}>
                 <FeetSVG id="feet-image" width={width} height={height} />
             </div>

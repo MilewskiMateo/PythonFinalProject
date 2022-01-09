@@ -102,7 +102,7 @@ body {
     background-color: #2d3038;
     width: 100%;
 }
-.Indicator {
+.Indicator > div > .daq-indicator--light__indicator--off{
     background-color: #4C78A8;
 }
 .metric-row > div {

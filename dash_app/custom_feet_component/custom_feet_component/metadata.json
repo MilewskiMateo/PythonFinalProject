@@ -1,6 +1,6 @@
 {
   "src/lib/components/FeetComponent.react.js": {
-    "description": "Custom component for displaying sensors position on the feet and their current value",
+    "description": "",
     "displayName": "FeetComponent",
     "methods": [],
     "props": {

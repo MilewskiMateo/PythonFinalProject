@@ -5,7 +5,7 @@ from dash.development.base_component import Component, _explicitize_args
 
 class FeetComponent(Component):
     """A FeetComponent component.
-Custom component for displaying sensors position on the feet and their current value
+
 
 Keyword arguments:
 

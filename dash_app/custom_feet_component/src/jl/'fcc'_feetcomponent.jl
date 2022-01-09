@@ -6,7 +6,7 @@ export 'fcc'_feetcomponent
     'fcc'_feetcomponent(;kwargs...)
 
 A FeetComponent component.
-Custom component for displaying sensors position on the feet and their current value
+
 Keyword arguments:
 - `id` (String; optional): The ID used to identify this component in Dash callbacks.
 - `className` (String; optional): CSS classes added to the main div
